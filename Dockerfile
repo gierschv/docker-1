@@ -102,6 +102,9 @@ RUN set -x \
 RUN find /usr/src/weblate -name '*.patch' -print0 | sort -z | \
   xargs -n1 -0 -r patch -p1 -d /usr/local/lib/python3.7/dist-packages/ -i
 
+# Sign in with Flat
+RUN echo "if 'WEBLATE_SOCIAL_AUTH_FLAT_KEY' in os.environ:\n    AUTHENTICATION_BACKENDS += ('social_core.backends.flat.FlatOAuth2',)\nSOCIAL_AUTH_FLAT_KEY = os.environ.get('WEBLATE_SOCIAL_AUTH_FLAT_KEY', '')\nSOCIAL_AUTH_FLAT_SECRET = os.environ.get('WEBLATE_SOCIAL_AUTH_FLAT_SECRET', '')\nSOCIAL_AUTH_FLAT_SCOPE = ['account.public_profile', 'account.email']" >> /usr/local/lib/python3.7/dist-packages/weblate/settings_docker.py
+
 # Install Hub
 RUN curl -L https://github.com/github/hub/releases/download/v2.13.0/hub-linux-amd64-2.13.0.tgz | tar xzv --wildcards hub-linux*/bin/hub && \
   cp hub-linux-amd64-*/bin/hub /usr/bin && \
